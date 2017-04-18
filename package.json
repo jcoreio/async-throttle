@@ -43,7 +43,10 @@
     "url": "https://github.com/jcoreio/async-throttle.git"
   },
   "keywords": [
-    "es2015"
+    "async",
+    "async-await",
+    "throttle",
+    "promise"
   ],
   "author": "Andy Edwards",
   "license": "MIT",
