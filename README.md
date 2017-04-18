@@ -16,6 +16,10 @@ npm install --save @jcoreio/async-throttle
 ### Usage
 
 ```js
+import throttle from '@jcoreio/async-throttle'
+```
+
+```js
 function throttle<Args: Array<any>, Value>(
   func: (...args: Args) => Promise<Value>,
   wait: ?number,
