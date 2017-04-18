@@ -1,6 +1,6 @@
 // @flow
 
-import {describe, it} from 'mocha'
+import {describe, it, beforeEach, afterEach} from 'mocha'
 import {expect, assert} from 'chai'
 import sinon from 'sinon'
 import {resolve} from 'bluebird'
@@ -15,7 +15,7 @@ describe('throttle', () => {
   afterEach(() => clock.restore())
 
   it('works', async function (): Promise<void> {
-    const foo = sinon.spy(async (a, wait) => {
+    const foo = sinon.spy(async (a: number, wait?: number): Promise<number> => {
       if (wait) await delay(wait)
       if (a < 0) throw new Error()
       return a * 2
