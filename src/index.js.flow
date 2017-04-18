@@ -1,3 +1,9 @@
 // @flow
 
-declare export default function throttle<A: Array<any>, R>(fn: (...args: A) => Promise<R>, delay: number): (...args: A) => Promise<R>;
+declare export default function throttle<Args: Array<any>, Value>(
+  fn: (...args: Args) => Promise<Value>,
+  wait: ?number,
+  options?: {
+    getNextArgs?: (args0: Args, args1: Args) => Args
+  }
+): (...args: Args) => Promise<Value>;

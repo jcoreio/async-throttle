@@ -30,6 +30,7 @@ describe('throttle', () => {
     expect(foo.args).to.deep.equal([[3]])
 
     promises = [fn(4), fn(-4), fn(5)].map(resolve)
+    promises.forEach(p => p.catch(() => {}))
     clock.tick(40)
     await new Promise(setImmediate)
     for (let promise of promises) assert(promise.isPending())
@@ -57,6 +58,7 @@ describe('throttle', () => {
 
     promises.push(fn(2, 200), fn(-3, 200))
     promises = promises.map(resolve)
+    promises.forEach(p => p.catch(() => {}))
     for (let promise of promises) assert(promise.isPending())
 
     clock.tick(200)
@@ -66,6 +68,41 @@ describe('throttle', () => {
     for (let i of [1, 2]) assert(promises[i].isPending())
     clock.tick(200)
     await new Promise(setImmediate)
-    for (let i of [1, 2]) expect(promises[i].reason()).to.exist
+    for (let i of [1, 2]) expect(promises[i].isRejected()).to.be.true
+  })
+  it('supports getNextArgs option', async function (): Promise<void> {
+    const foo = sinon.spy(async (a: number, wait?: number): Promise<number> => {
+      if (wait) await delay(wait)
+      if (a < 0) throw new Error()
+      return a * 2
+    })
+    const fn = throttle(foo, 100, {
+      getNextArgs: ([a], [b]) => [Math.min(a, b)]
+    })
+
+    let promises = [fn(1), fn(2), fn(3)].map(resolve)
+    for (let promise of promises) assert(promise.isPending())
+
+    clock.tick(1)
+    await new Promise(setImmediate)
+    for (let promise of promises) expect(promise.value()).to.equal(2)
+    expect(foo.args).to.deep.equal([[1]])
+
+
+    promises = [fn(4), fn(-4), fn(5)].map(resolve)
+    promises.forEach(p => p.catch(() => {}))
+    clock.tick(40)
+    await new Promise(setImmediate)
+    for (let promise of promises) assert(promise.isPending())
+
+    clock.tick(60)
+    await new Promise(setImmediate)
+    for (let promise of promises) expect(promise.isRejected()).to.be.true
+
+    expect(foo.args).to.deep.equal([[1], [-4]])
+
+    clock.tick(1000)
+    await new Promise(setImmediate)
+    expect(foo.args).to.deep.equal([[1], [-4]])
   })
 })

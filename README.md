@@ -13,7 +13,42 @@ throttle async and promise-returning functions.  Other packages don't do it righ
 npm install --save @jcoreio/async-throttle
 ```
 
-### `throttle(func, delay)`
+### Usage
+
+```js
+function throttle<Args: Array<any>, Value>(
+  func: (...args: Args) => Promise<Value>,
+  wait: ?number,
+  options?: {
+    getNextArgs?: (current: Args, next: Args) => Args
+  }
+): (...args: Args) => Promise<Value>;
+```
 
 Creates a throttled function that only invokes `func` at most once per every `wait` milliseconds, and also waits for the
-`Promise` returned by the previous invocation to finish.
+`Promise` returned by the previous invocation to finish (it won't invoke `func` in parallel).
+
+The promise returned by the throttled function will track the promise returned by the next invocation of `func`.
+
+If `wait` is falsy, it is treated as 0, which causes `func` to be invoked on the next tick afte the previous invocation
+finishes.
+
+By default, `func` is called with the most recent arguments to the throttled function.  You can change this with the
+`getNextArgs` option -- for example, if you want to invoke `func` with the minimum of all arguments since the last
+invocation:
+```js
+const throttled = throttle(foo, 10, {
+  getNextArgs: ([a], [b]) => [Math.min(a, b)]
+})
+throttled(2)
+throttled(1)
+throttled(3)
+// foo will be called with 1
+
+// time passes...
+
+throttled(4)
+throttled(6)
+throttled(5)
+// foo will be called with 4
+```

@@ -1,23 +1,31 @@
 const delay = ms => new Promise(resolve => setTimeout(resolve, Math.max(ms, 0) || 0))
 
-export default function throttle(fn, wait) {
-  let lastArgs
+module.exports = function throttle(fn, wait, {getNextArgs} = {}) {
+  if (!getNextArgs) getNextArgs = (prev, next) => next
+
+  let nextArgs
   let lastPromise = delay(0)
   let nextPromise = null
-  let lastCallTime = NaN
+  let lastInvokeTime = NaN
 
-  function call() {
-    lastCallTime = Date.now()
+  function invoke() {
+    lastInvokeTime = Date.now()
     nextPromise = null
-    return lastPromise = fn(...lastArgs)
+    const args = nextArgs
+    nextArgs = null
+    return lastPromise = fn(...args)
   }
 
   return async function () {
-    lastArgs = [...arguments]
-    if (!nextPromise) nextPromise = Promise.all([
-      lastPromise,
-      delay(lastCallTime + wait - Date.now())
-    ]).then(call, call)
+    nextArgs = nextArgs
+      ? getNextArgs(nextArgs, [...arguments])
+      : [...arguments]
+    if (!nextPromise) {
+      nextPromise = Promise.all([
+        lastPromise,
+        delay(lastInvokeTime + wait - Date.now())
+      ]).then(invoke, invoke)
+    }
     return nextPromise
   }
 }
