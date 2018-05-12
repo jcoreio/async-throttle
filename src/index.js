@@ -1,25 +1,34 @@
-const delay = ms => new Promise(resolve => setTimeout(resolve, Math.max(ms, 0) || 0))
+// @flow
 
-module.exports = function throttle(fn, wait, {getNextArgs} = {}) {
-  if (!getNextArgs) getNextArgs = (prev, next) => next
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, Math.max(ms, 0) || 0))
 
-  let nextArgs
-  let lastPromise = delay(0)
-  let nextPromise = null
-  let lastInvokeTime = NaN
+module.exports = function throttle<Args: Array<any>, Value>(
+  fn: (...args: Args) => Promise<Value>,
+  wait: ?number,
+  options: {
+    getNextArgs?: (args0: Args, args1: Args) => Args,
+  } = {}
+): (...args: Args) => Promise<Value> {
+  const getNextArgs = options.getNextArgs || ((prev, next) => next)
 
-  function invoke() {
+  let nextArgs: ?Args
+  let lastPromise: Promise<any> = delay(0)
+  let nextPromise: ?Promise<Value> = null
+  let lastInvokeTime: number = NaN
+
+  function invoke(): Promise<Value> {
     lastInvokeTime = Date.now()
     nextPromise = null
     const args = nextArgs
+    if (!args) throw new Error('unexpected error: nextArgs is null')
     nextArgs = null
     return lastPromise = fn(...args)
   }
 
-  return async function () {
+  return async function (...args: Args): Promise<Value> {
     nextArgs = nextArgs
-      ? getNextArgs(nextArgs, [...arguments])
-      : [...arguments]
+      ? getNextArgs(nextArgs, args)
+      : args
     if (!nextPromise) {
       nextPromise = Promise.all([
         lastPromise,
