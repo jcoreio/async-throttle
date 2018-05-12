@@ -2,6 +2,7 @@
   "extends": [
     "@jedwards1211/eslint-config", "@jedwards1211/eslint-config-flow"
   ],
+  "parser": "babel-eslint",
   "env": {
     "shared-node-browser": true,
     "commonjs": true
