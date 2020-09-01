@@ -5,13 +5,12 @@ cache:
 notifications:
   email: false
 node_js:
-  - '8'
-  - '7'
-  - '6'
+  - '14'
+  - '12'
 install:
-  - yarn install --ignore-engines --check-files --frozen-lockfile
+  - npm install --ignore-engines
 script:
-  - yarn run prepublishOnly
+  - npm run prepublishOnly
 after_success:
   - npm run codecov
   - npm run travis-deploy-once "npm run semantic-release"
