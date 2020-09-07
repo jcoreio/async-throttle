@@ -1,11 +1,10 @@
 # async-throttle
 
-[![Build Status](https://travis-ci.org/jcoreio/async-throttle.svg?branch=master)](https://travis-ci.org/jcoreio/async-throttle)
--[![Coverage Status](https://codecov.io/gh/jcoreio/async-throttle/branch/master/graph/badge.svg)](https://codecov.io/gh/jcoreio/async-throttle)
+[![Build Status](https://travis-ci.org/jcoreio/async-throttle.svg?branch=master)](https://travis-ci.org/jcoreio/async-throttle) -[![Coverage Status](https://codecov.io/gh/jcoreio/async-throttle/branch/master/graph/badge.svg)](https://codecov.io/gh/jcoreio/async-throttle)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
-throttle async and promise-returning functions.  Other packages don't do it right.
+throttle async and promise-returning functions. Other packages don't do it right.
 
 ## Installing
 
@@ -37,12 +36,13 @@ The promise returned by the throttled function will track the promise returned b
 If `wait` is falsy, it is treated as 0, which causes `func` to be invoked on the next tick afte the previous invocation
 finishes.
 
-By default, `func` is called with the most recent arguments to the throttled function.  You can change this with the
+By default, `func` is called with the most recent arguments to the throttled function. You can change this with the
 `getNextArgs` option -- for example, if you want to invoke `func` with the minimum of all arguments since the last
 invocation:
+
 ```js
 const throttled = throttle(foo, 10, {
-  getNextArgs: ([a], [b]) => [Math.min(a, b)]
+  getNextArgs: ([a], [b]) => [Math.min(a, b)],
 })
 throttled(2)
 throttled(1)

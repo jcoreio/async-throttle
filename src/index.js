@@ -1,6 +1,7 @@
 // @flow
 
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, Math.max(ms, 0) || 0))
+const delay = (ms: number) =>
+  new Promise(resolve => setTimeout(resolve, Math.max(ms, 0) || 0))
 
 module.exports = function throttle<Args: Array<any>, Value>(
   fn: (...args: Args) => Promise<Value>,
@@ -22,20 +23,17 @@ module.exports = function throttle<Args: Array<any>, Value>(
     const args = nextArgs
     if (!args) throw new Error('unexpected error: nextArgs is null')
     nextArgs = null
-    return lastPromise = fn(...args)
+    return (lastPromise = fn(...args))
   }
 
-  return async function (...args: Args): Promise<Value> {
-    nextArgs = nextArgs
-      ? getNextArgs(nextArgs, args)
-      : args
+  return async function(...args: Args): Promise<Value> {
+    nextArgs = nextArgs ? getNextArgs(nextArgs, args) : args
     if (!nextPromise) {
       nextPromise = Promise.all([
         lastPromise,
-        delay(lastInvokeTime + wait - Date.now())
+        delay(lastInvokeTime + wait - Date.now()),
       ]).then(invoke, invoke)
     }
     return nextPromise
   }
 }
-
