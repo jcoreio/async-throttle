@@ -178,6 +178,52 @@ describe('throttle', () => {
     await clock.tickAsync(1)
     expect(promises[5].value()).to.equal(12)
   })
+  it('.cancel when invocation takes longer than wait', async function() {
+    const foo = sinon.spy(
+      async (a: number, wait?: number): Promise<number> => {
+        if (wait) await delay(wait)
+        if (a < 0) throw new Error()
+        return a * 2
+      }
+    )
+    const fn = throttle(foo, 25)
+    const promises = []
+    const invoke = (a: number, wait?: number) =>
+      promises.push(wrapPromise(fn(a, wait)))
+    invoke(1, 50)
+    invoke(2, 50)
+    await clock.tickAsync(1)
+    invoke(3, 50)
+
+    const cancelPromise = wrapPromise(fn.cancel())
+
+    invoke(4, 50)
+    invoke(5, 50)
+
+    await clock.tickAsync(40)
+    expect(promises[0].isPending()).to.be.true
+    expect(promises[1].isPending()).to.be.true
+    expect(promises[2].isPending()).to.be.true
+    expect(promises[3].isPending()).to.be.true
+    expect(promises[4].isPending()).to.be.true
+    expect(cancelPromise.isPending()).to.be.true
+
+    invoke(6, 50)
+
+    await clock.tickAsync(10)
+    expect(promises[0].value()).to.equal(4)
+    expect(promises[1].value()).to.equal(4)
+    expect(promises[2].reason()).to.be.an.instanceOf(CanceledError)
+    expect(promises[3].value()).to.equal(10)
+    expect(promises[4].value()).to.equal(10)
+    expect(promises[5].isPending()).to.be.true
+    expect(cancelPromise.value()).to.be.undefined
+
+    await clock.tickAsync(49)
+    expect(promises[5].isPending()).to.be.true
+    await clock.tickAsync(1)
+    expect(promises[5].value()).to.equal(12)
+  })
   it('.flush', async function() {
     const foo = sinon.spy(
       async (a: number, wait?: number): Promise<number> => {

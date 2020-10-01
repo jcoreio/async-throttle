@@ -9,30 +9,25 @@ class CanceledError extends Error {
 
 class Delay {
   ready: Promise<void>
-  _resolve: () => void
-  _reject: Error => void
-  _timeout: TimeoutID
+  effect: Promise<void> | void
+  timeout: TimeoutID
 
-  constructor(wait: number) {
-    const promise = new Promise(
-      (resolve: () => void, reject: Error => void) => {
-        this._resolve = resolve
-        this._reject = reject
-        this._timeout = setTimeout(resolve, wait)
-      }
+  constructor(lastInvocationDone: Promise<any>, wait: number) {
+    this.effect = new Promise(
+      resolve => (this.timeout = setTimeout(resolve, wait))
     )
-    promise.catch(() => {})
-    this.ready = promise
+    this.ready = lastInvocationDone.then(() => this.effect)
   }
 
   flush() {
-    clearTimeout(this._timeout)
-    this._resolve()
+    clearTimeout(this.timeout)
+    this.effect = undefined
   }
 
   cancel() {
-    clearTimeout(this._timeout)
-    this._reject(new CanceledError())
+    clearTimeout(this.timeout)
+    this.effect = Promise.reject(new CanceledError())
+    this.effect.catch(() => {})
   }
 }
 
@@ -51,46 +46,41 @@ function throttle<Args: Array<any>, Value>(
   const getNextArgs = options.getNextArgs || ((prev, next) => next)
 
   let nextArgs: ?Args
-  let delay: Delay = new Delay(0)
-  const initialReady = delay.ready
-  let lastPromise: Promise<any> = Promise.resolve()
-  let readyPromise: Promise<any> = lastPromise.then(() => initialReady)
-  let nextPromise: ?Promise<Value> = null
+  let lastInvocationDone: Promise<any> = Promise.resolve()
+  let delay: Delay = new Delay(lastInvocationDone, 0)
+  let nextInvocation: ?Promise<Value> = null
 
   function invoke(): Promise<Value> {
     const args = nextArgs
     if (!args) throw new Error('unexpected error: nextArgs is null')
-    nextPromise = null
+    nextInvocation = null
     nextArgs = null
-    delay = new Delay(wait)
-    const { ready } = delay
     const result = fn(...args)
-    lastPromise = result.catch(() => {})
-    readyPromise = lastPromise.then(() => ready)
+    lastInvocationDone = result.catch(() => {})
+    delay = new Delay(lastInvocationDone, wait)
     return result
   }
 
-  async function wrapper(...args: Args): Promise<Value> {
+  function wrapper(...args: Args): Promise<Value> {
     nextArgs = nextArgs ? getNextArgs(nextArgs, args) : args
     if (!nextArgs) throw new Error('unexpected error: nextArgs is null')
-    if (!nextPromise) nextPromise = readyPromise.then(invoke)
-    return nextPromise
+    if (!nextInvocation) nextInvocation = delay.ready.then(invoke)
+    return nextInvocation
   }
 
   wrapper.cancel = async (): Promise<void> => {
-    const _lastPromise = lastPromise
+    const _lastInvocationDone = lastInvocationDone
     delay.cancel()
-    nextPromise = null
-    delay = new Delay(0)
-    const { ready } = delay
-    lastPromise = Promise.resolve()
-    readyPromise = lastPromise.then(() => ready)
-    await _lastPromise
+    nextInvocation = null
+    nextArgs = null
+    lastInvocationDone = Promise.resolve()
+    delay = new Delay(lastInvocationDone, 0)
+    await _lastInvocationDone
   }
 
   wrapper.flush = async (): Promise<void> => {
     delay.flush()
-    await lastPromise
+    await lastInvocationDone
   }
 
   return wrapper
