@@ -6,7 +6,7 @@
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![npm version](https://badge.fury.io/js/%40jcoreio%2Fasync-throttle.svg)](https://badge.fury.io/js/%40jcoreio%2Fasync-throttle)
 
-throttle async and promise-returning functions. Other packages don't do it right.
+The async version of `lodash.throttle`. Similarly named packages don't do what you'd expect if you're used to `lodash.throttle`.
 
 ## Installing
 
