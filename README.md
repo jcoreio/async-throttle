@@ -17,7 +17,7 @@ npm install --save @jcoreio/async-throttle
 ### Usage
 
 ```js
-import throttle from '@jcoreio/async-throttle'
+const throttle = require('@jcoreio/async-throttle')
 ```
 
 ```js
@@ -43,18 +43,33 @@ By default, `func` is called with the most recent arguments to the throttled fun
 invocation:
 
 ```js
-const throttled = throttle(foo, 10, {
+const throttledFn = throttle(foo, 10, {
   getNextArgs: ([a], [b]) => [Math.min(a, b)],
 })
-throttled(2)
-throttled(1)
-throttled(3)
+throttledFn(2)
+throttledFn(1)
+throttledFn(3)
 // foo will be called with 1
 
 // time passes...
 
-throttled(4)
-throttled(6)
-throttled(5)
+throttledFn(4)
+throttledFn(6)
+throttledFn(5)
 // foo will be called with 4
 ```
+
+### `throttledFn.cancel()`
+
+Cancels the pending invocation, if any. All `Promise`s tracking the pending invocation will be
+rejected with a `CancelationError` (`const {CancelationError} = require('@jcoreio/async-throttle')`).
+However, if an invocation is currently running, all `Promise`s tracking the current invocation will be fulfilled as usual.
+
+Returns a `Promise` that will resolve once the current invocation (if any) is finished.
+
+### `throttledFn.flush()`
+
+Cancels the `wait` before the pending invocation, if any. The pending invocation will still wait for the current invocation (if any)
+to finish, but will begin immediately afterward, even if `wait` has not elapsed.
+
+Returns a `Promise` that will resolve once the current invocation (if any) is finished.

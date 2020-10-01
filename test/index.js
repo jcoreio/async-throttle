@@ -5,33 +5,41 @@ import { expect, assert } from 'chai'
 import delay from 'waait'
 import sinon from 'sinon'
 
-import throttle from '../src/index'
+import throttle, { CanceledError } from '../src/index'
 
 const wrapPromise = <T>(
   promise: Promise<T>
 ): Promise<T> & {
   isPending: () => boolean,
-  value: () => T,
+  isResolved: () => boolean,
   isRejected: () => boolean,
+  value: () => T,
+  reason: () => ?Error,
 } => {
-  let isPending = true
-  let value: T = (null: any)
-  let isRejected = false
+  let state:
+    | { state: 'pending' }
+    | { state: 'resolved', value: T }
+    | { state: 'rejected', reason: Error } = { state: 'pending' }
   const result: any = promise
-  result.isPending = () => isPending
+  result.isPending = () => state.state === 'pending'
+  result.isResolved = () => state.state === 'resolved'
+  result.isRejected = () => state.state === 'rejected'
   result.value = (): T => {
-    if (isPending) throw new Error(`promise is pending`)
-    return value
+    const s = state
+    if (s.state !== 'resolved') throw new Error(`promise is ${s.state}`)
+    return s.value
   }
-  result.isRejected = () => isRejected
+  result.reason = (): Error => {
+    const s = state
+    if (s.state !== 'rejected') throw new Error(`promise is ${s.state}`)
+    return s.reason
+  }
   result.then(
-    (v: T) => {
-      isPending = false
-      value = v
+    (value: T) => {
+      state = { state: 'resolved', value }
     },
-    (err: Error) => {
-      isPending = false
-      isRejected = true
+    (reason: Error) => {
+      state = { state: 'rejected', reason }
     }
   )
   return result
@@ -123,5 +131,98 @@ describe('throttle', () => {
 
     await clock.tickAsync(1000)
     expect(foo.args).to.deep.equal([[1], [-4]])
+  })
+  it('.cancel', async function() {
+    const foo = sinon.spy(
+      async (a: number, wait?: number): Promise<number> => {
+        if (wait) await delay(wait)
+        if (a < 0) throw new Error()
+        return a * 2
+      }
+    )
+    const fn = throttle(foo, 100)
+    const promises = []
+    const invoke = (a: number, wait?: number) =>
+      promises.push(wrapPromise(fn(a, wait)))
+    invoke(1, 50)
+    invoke(2, 50)
+    await clock.tickAsync(1)
+    invoke(3, 50)
+
+    const cancelPromise = wrapPromise(fn.cancel())
+
+    invoke(4, 50)
+    invoke(5, 50)
+
+    await clock.tickAsync(40)
+    expect(promises[0].isPending()).to.be.true
+    expect(promises[1].isPending()).to.be.true
+    expect(promises[2].isPending()).to.be.true
+    expect(promises[3].isPending()).to.be.true
+    expect(promises[4].isPending()).to.be.true
+    expect(cancelPromise.isPending()).to.be.true
+
+    invoke(6, 50)
+
+    await clock.tickAsync(10)
+    expect(promises[0].value()).to.equal(4)
+    expect(promises[1].value()).to.equal(4)
+    expect(promises[2].reason()).to.be.an.instanceOf(CanceledError)
+    expect(promises[3].value()).to.equal(10)
+    expect(promises[4].value()).to.equal(10)
+    expect(promises[5].isPending()).to.be.true
+    expect(cancelPromise.value()).to.be.undefined
+
+    await clock.tickAsync(99)
+    expect(promises[5].isPending()).to.be.true
+    await clock.tickAsync(1)
+    expect(promises[5].value()).to.equal(12)
+  })
+  it('.flush', async function() {
+    const foo = sinon.spy(
+      async (a: number, wait?: number): Promise<number> => {
+        if (wait) await delay(wait)
+        if (a < 0) throw new Error()
+        return a * 2
+      }
+    )
+    const fn = throttle(foo, 100)
+    const promises = []
+    const invoke = (a: number, wait?: number) =>
+      promises.push(wrapPromise(fn(a, wait)))
+    invoke(1, 50)
+    invoke(2, 50)
+    await clock.tickAsync(1)
+    invoke(3, 50)
+
+    const flushPromise = wrapPromise(fn.flush())
+
+    invoke(4, 50)
+    invoke(5, 50)
+
+    await clock.tickAsync(40)
+    expect(promises[0].isPending()).to.be.true
+    expect(promises[1].isPending()).to.be.true
+    expect(promises[2].isPending()).to.be.true
+    expect(promises[3].isPending()).to.be.true
+    expect(promises[4].isPending()).to.be.true
+    expect(flushPromise.isPending()).to.be.true
+
+    await clock.tickAsync(9)
+    expect(promises[0].value()).to.equal(4)
+    expect(promises[1].value()).to.equal(4)
+    expect(promises[2].isPending()).to.be.true
+    expect(promises[3].isPending()).to.be.true
+    expect(promises[4].isPending()).to.be.true
+    expect(flushPromise.value()).to.be.undefined
+
+    await clock.tickAsync(40)
+    expect(promises[2].isPending()).to.be.true
+    expect(promises[3].isPending()).to.be.true
+    expect(promises[4].isPending()).to.be.true
+    await clock.tickAsync(10)
+    expect(promises[2].value()).to.equal(10)
+    expect(promises[3].value()).to.equal(10)
+    expect(promises[4].value()).to.equal(10)
   })
 })
