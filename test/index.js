@@ -50,6 +50,13 @@ describe('throttle', () => {
   beforeEach(() => (clock = sinon.useFakeTimers()))
   afterEach(() => clock.restore())
 
+  it(`throws when nextArgs is null`, async function() {
+    const fn = throttle(async x => x * 2, 100, {
+      getNextArgs: () => (null: any),
+    })
+    fn(1)
+    expect(() => fn(1)).to.throw()
+  })
   it('works', async function(): Promise<void> {
     const foo = sinon.spy(
       async (a: number, wait?: number): Promise<number> => {
