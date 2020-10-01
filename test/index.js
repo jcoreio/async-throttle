@@ -47,8 +47,25 @@ const wrapPromise = <T>(
 
 describe('throttle', () => {
   let clock
-  beforeEach(() => (clock = sinon.useFakeTimers()))
-  afterEach(() => clock.restore())
+
+  let unhandledRejections = []
+
+  const handleUnhandledRejection = err => unhandledRejections.push(err)
+  before(() => {
+    process.on('unhandledRejection', handleUnhandledRejection)
+  })
+  after(() => {
+    process.removeListener('unhandledRejection', handleUnhandledRejection)
+  })
+
+  beforeEach(() => {
+    unhandledRejections = []
+    clock = sinon.useFakeTimers()
+  })
+  afterEach(() => {
+    clock.restore()
+    expect(unhandledRejections).to.deep.equal([])
+  })
 
   it(`throws when nextArgs is null`, async function() {
     const fn = throttle(async x => x * 2, 100, {
@@ -277,5 +294,18 @@ describe('throttle', () => {
     expect(promises[2].value()).to.equal(10)
     expect(promises[3].value()).to.equal(10)
     expect(promises[4].value()).to.equal(10)
+  })
+  describe(`bugs`, function() {
+    it(`unhandled rejection`, async function() {
+      const myFn = throttle(
+        () => new Promise(resolve => setTimeout(resolve, 10)),
+        1000
+      )
+      await Promise.all([
+        myFn().catch(() => {}),
+        myFn.cancel(),
+        clock.tickAsync(5000),
+      ])
+    })
   })
 })
