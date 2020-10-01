@@ -15,25 +15,20 @@ module.exports = function throttle<Args: Array<any>, Value>(
   let nextArgs: ?Args
   let lastPromise: Promise<any> = delay(0)
   let nextPromise: ?Promise<Value> = null
-  let lastInvokeTime: number = NaN
 
   function invoke(): Promise<Value> {
-    lastInvokeTime = Date.now()
     nextPromise = null
     const args = nextArgs
     if (!args) throw new Error('unexpected error: nextArgs is null')
     nextArgs = null
-    return (lastPromise = fn(...args))
+    const result = fn(...args)
+    lastPromise = Promise.all([result, delay(wait || 0)])
+    return result
   }
 
   return async function(...args: Args): Promise<Value> {
     nextArgs = nextArgs ? getNextArgs(nextArgs, args) : args
-    if (!nextPromise) {
-      nextPromise = Promise.all([
-        lastPromise,
-        delay(lastInvokeTime + wait - Date.now()),
-      ]).then(invoke, invoke)
-    }
+    if (!nextPromise) nextPromise = lastPromise.then(invoke, invoke)
     return nextPromise
   }
 }
