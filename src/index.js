@@ -32,7 +32,7 @@ class Delay {
 }
 
 function throttle<Args: Array<any>, Value>(
-  fn: (...args: Args) => Promise<Value>,
+  fn: (...args: Args) => Value | Promise<Value>,
   _wait: ?number,
   options: {
     getNextArgs?: (args0: Args, args1: Args) => Args,
@@ -52,10 +52,16 @@ function throttle<Args: Array<any>, Value>(
 
   function invoke(): Promise<Value> {
     const args = nextArgs
+    // istanbul ignore next
     if (!args) throw new Error('unexpected error: nextArgs is null')
     nextInvocation = null
     nextArgs = null
-    const result = fn(...args)
+    let result
+    try {
+      result = Promise.resolve(fn(...args))
+    } catch (error) {
+      result = Promise.reject(error)
+    }
     lastInvocationDone = result.catch(() => {})
     delay = new Delay(lastInvocationDone, wait)
     return result
