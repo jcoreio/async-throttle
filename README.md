@@ -27,6 +27,7 @@ npm install --save @jcoreio/async-throttle
 
 ```js
 const throttle = require('@jcoreio/async-throttle')
+import throttle from '@jcoreio/async-throttle'
 ```
 
 ```js
