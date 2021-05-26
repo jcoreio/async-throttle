@@ -2,11 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-<<<<<<< HEAD
-      - image: circleci/node:12.16
-=======
       - image: circleci/node:14
->>>>>>> 4d516c22098cb462793346b3f1aea91563b8ba5b
 
     steps:
       - checkout
