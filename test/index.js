@@ -9,13 +9,13 @@ import throttle, { CanceledError } from '../src/index'
 
 const wrapPromise = <T>(
   promise: Promise<T>
-): Promise<T> & {
+): (Promise<T> & {
   isPending: () => boolean,
   isResolved: () => boolean,
   isRejected: () => boolean,
   value: () => T,
   reason: () => ?Error,
-} => {
+}) => {
   let state:
     | { state: 'pending' }
     | { state: 'resolved', value: T }
@@ -50,7 +50,7 @@ describe('throttle', () => {
 
   let unhandledRejections = []
 
-  const handleUnhandledRejection = err => unhandledRejections.push(err)
+  const handleUnhandledRejection = (err) => unhandledRejections.push(err)
   before(() => {
     process.on('unhandledRejection', handleUnhandledRejection)
   })
@@ -67,20 +67,18 @@ describe('throttle', () => {
     expect(unhandledRejections).to.deep.equal([])
   })
 
-  it(`throws when nextArgs is null`, async function() {
-    const fn = throttle(async x => x * 2, 100, {
+  it(`throws when nextArgs is null`, async function () {
+    const fn = throttle(async (x) => x * 2, 100, {
       getNextArgs: () => (null: any),
     })
     fn(1)
     expect(() => fn(1)).to.throw('unexpected error: nextArgs is null')
   })
-  it('works with sync function', async function(): Promise<void> {
-    const foo = sinon.spy(
-      (a: number, wait?: number): number => {
-        if (a < 0) throw new Error()
-        return a * 2
-      }
-    )
+  it('works with sync function', async function (): Promise<void> {
+    const foo = sinon.spy((a: number, wait?: number): number => {
+      if (a < 0) throw new Error()
+      return a * 2
+    })
     const fn = throttle(foo, 100)
     let promises = [fn(1), fn(2), fn(3)].map(wrapPromise)
     for (let promise of promises) assert(promise.isPending())
@@ -90,7 +88,7 @@ describe('throttle', () => {
     expect(foo.args).to.deep.equal([[3]])
 
     promises = [fn(4), fn(-4), fn(5)].map(wrapPromise)
-    promises.forEach(p => p.catch(() => {}))
+    promises.forEach((p) => p.catch(() => {}))
     await clock.tickAsync(40)
     for (let promise of promises) assert(promise.isPending())
 
@@ -110,14 +108,12 @@ describe('throttle', () => {
     await clock.tickAsync(100)
     assert(promises[0].isRejected())
   })
-  it('works', async function(): Promise<void> {
-    const foo = sinon.spy(
-      async (a: number, wait?: number): Promise<number> => {
-        if (wait) await delay(wait)
-        if (a < 0) throw new Error()
-        return a * 2
-      }
-    )
+  it('works', async function (): Promise<void> {
+    const foo = sinon.spy(async (a: number, wait?: number): Promise<number> => {
+      if (wait) await delay(wait)
+      if (a < 0) throw new Error()
+      return a * 2
+    })
     const fn = throttle(foo, 100)
     let promises = [fn(1), fn(2), fn(3)].map(wrapPromise)
     for (let promise of promises) assert(promise.isPending())
@@ -127,7 +123,7 @@ describe('throttle', () => {
     expect(foo.args).to.deep.equal([[3]])
 
     promises = [fn(4), fn(-4), fn(5)].map(wrapPromise)
-    promises.forEach(p => p.catch(() => {}))
+    promises.forEach((p) => p.catch(() => {}))
     await clock.tickAsync(40)
     for (let promise of promises) assert(promise.isPending())
 
@@ -150,7 +146,7 @@ describe('throttle', () => {
 
     promises.push(fn(2, 200), fn(-3, 200))
     promises = promises.map(wrapPromise)
-    promises.forEach(p => p.catch(() => {}))
+    promises.forEach((p) => p.catch(() => {}))
     for (let promise of promises) assert(promise.isPending())
 
     await clock.tickAsync(200)
@@ -160,14 +156,12 @@ describe('throttle', () => {
     await clock.tickAsync(200)
     for (let i of [1, 2]) expect(promises[i].isRejected()).to.be.true
   })
-  it('supports getNextArgs option', async function(): Promise<void> {
-    const foo = sinon.spy(
-      async (a: number, wait?: number): Promise<number> => {
-        if (wait) await delay(wait)
-        if (a < 0) throw new Error()
-        return a * 2
-      }
-    )
+  it('supports getNextArgs option', async function (): Promise<void> {
+    const foo = sinon.spy(async (a: number, wait?: number): Promise<number> => {
+      if (wait) await delay(wait)
+      if (a < 0) throw new Error()
+      return a * 2
+    })
     const fn = throttle(foo, 100, {
       getNextArgs: ([a], [b]) => [Math.min(a, b)],
     })
@@ -180,7 +174,7 @@ describe('throttle', () => {
     expect(foo.args).to.deep.equal([[1]])
 
     promises = [fn(4), fn(-4), fn(5)].map(wrapPromise)
-    promises.forEach(p => p.catch(() => {}))
+    promises.forEach((p) => p.catch(() => {}))
     await clock.tickAsync(40)
     for (let promise of promises) assert(promise.isPending())
 
@@ -192,14 +186,12 @@ describe('throttle', () => {
     await clock.tickAsync(1000)
     expect(foo.args).to.deep.equal([[1], [-4]])
   })
-  it('.cancel', async function() {
-    const foo = sinon.spy(
-      async (a: number, wait?: number): Promise<number> => {
-        if (wait) await delay(wait)
-        if (a < 0) throw new Error()
-        return a * 2
-      }
-    )
+  it('.cancel', async function () {
+    const foo = sinon.spy(async (a: number, wait?: number): Promise<number> => {
+      if (wait) await delay(wait)
+      if (a < 0) throw new Error()
+      return a * 2
+    })
     const fn = throttle(foo, 100)
     const promises = []
     const invoke = (a: number, wait?: number) =>
@@ -238,14 +230,12 @@ describe('throttle', () => {
     await clock.tickAsync(1)
     expect(promises[5].value()).to.equal(12)
   })
-  it('.cancel when invocation takes longer than wait', async function() {
-    const foo = sinon.spy(
-      async (a: number, wait?: number): Promise<number> => {
-        if (wait) await delay(wait)
-        if (a < 0) throw new Error()
-        return a * 2
-      }
-    )
+  it('.cancel when invocation takes longer than wait', async function () {
+    const foo = sinon.spy(async (a: number, wait?: number): Promise<number> => {
+      if (wait) await delay(wait)
+      if (a < 0) throw new Error()
+      return a * 2
+    })
     const fn = throttle(foo, 25)
     const promises = []
     const invoke = (a: number, wait?: number) =>
@@ -284,14 +274,12 @@ describe('throttle', () => {
     await clock.tickAsync(1)
     expect(promises[5].value()).to.equal(12)
   })
-  it('.flush', async function() {
-    const foo = sinon.spy(
-      async (a: number, wait?: number): Promise<number> => {
-        if (wait) await delay(wait)
-        if (a < 0) throw new Error()
-        return a * 2
-      }
-    )
+  it('.flush', async function () {
+    const foo = sinon.spy(async (a: number, wait?: number): Promise<number> => {
+      if (wait) await delay(wait)
+      if (a < 0) throw new Error()
+      return a * 2
+    })
     const fn = throttle(foo, 100)
     const promises = []
     const invoke = (a: number, wait?: number) =>
@@ -331,10 +319,10 @@ describe('throttle', () => {
     expect(promises[3].value()).to.equal(10)
     expect(promises[4].value()).to.equal(10)
   })
-  describe(`bugs`, function() {
-    it(`unhandled rejection`, async function() {
+  describe(`bugs`, function () {
+    it(`unhandled rejection`, async function () {
       const myFn = throttle(
-        () => new Promise(resolve => setTimeout(resolve, 10)),
+        () => new Promise((resolve) => setTimeout(resolve, 10)),
         1000
       )
       await Promise.all([

@@ -2,14 +2,14 @@ version: 2
 jobs:
   build:
     docker:
+<<<<<<< HEAD
       - image: circleci/node:12.16
+=======
+      - image: circleci/node:14
+>>>>>>> 4d516c22098cb462793346b3f1aea91563b8ba5b
 
     steps:
       - checkout
-      - restore_cache:
-          name: Restore Yarn Package Cache
-          keys:
-            - v1-yarn-packages-{{ checksum "yarn.lock" }}
 
       - run:
           name: Setup NPM Token
@@ -26,18 +26,13 @@ jobs:
       - run:
           name: Install Dependencies
           command: yarn install --frozen-lockfile
-      - save_cache:
-          name: Save Yarn Package Cache
-          key: v1-yarn-packages-{{ checksum "yarn.lock" }}
-          paths:
-            - ~/.cache/yarn
 
       - run:
           name: build
           command: yarn run prepublishOnly
       - run:
           name: upload test coverage
-          command: yarn codecov || true
+          command: yarn codecov
       - run:
           name: release
-          command: yarn run semantic-release || true
+          command: yarn run semantic-release

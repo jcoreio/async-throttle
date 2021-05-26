@@ -14,7 +14,7 @@ class Delay {
 
   constructor(lastInvocationDone: Promise<any>, wait: number) {
     this.effect = new Promise(
-      resolve => (this.timeout = setTimeout(resolve, wait))
+      (resolve) => (this.timeout = setTimeout(resolve, wait))
     )
     this.ready = lastInvocationDone.then(() => this.effect)
   }
