@@ -9,25 +9,31 @@ class CanceledError extends Error {
 
 class Delay {
   ready: Promise<void>
+  resolve: () => void
+  reject: (error: Error) => void
   effect: Promise<void> | void
   timeout: TimeoutID
 
   constructor(lastInvocationDone: Promise<any>, wait: number) {
     this.effect = new Promise(
-      (resolve) => (this.timeout = setTimeout(resolve, wait))
+      (resolve: () => void, reject: (error: Error) => void) => {
+        this.timeout = setTimeout(resolve, wait)
+        this.resolve = resolve
+        this.reject = reject
+      }
     )
+    this.effect.catch(() => {})
     this.ready = lastInvocationDone.then(() => this.effect)
   }
 
   flush() {
     clearTimeout(this.timeout)
-    this.effect = undefined
+    this.resolve()
   }
 
   cancel() {
     clearTimeout(this.timeout)
-    this.effect = Promise.reject(new CanceledError())
-    this.effect.catch(() => {})
+    this.reject(new CanceledError())
   }
 }
 
