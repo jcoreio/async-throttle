@@ -24,6 +24,7 @@ class Delay {
     )
     this.effect.catch(() => {})
     this.ready = lastInvocationDone.then(() => this.effect)
+    this.ready.catch(() => {})
   }
 
   flush() {
