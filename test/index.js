@@ -71,8 +71,9 @@ describe('throttle', () => {
     const fn = throttle(async (x) => x * 2, 100, {
       getNextArgs: () => (null: any),
     })
-    fn(1)
-    expect(() => fn(1)).to.throw('unexpected error: nextArgs is null')
+    expect(Promise.all([fn(1), fn(1)])).to.be.rejectedWith(
+      'unexpected error: nextArgs is null'
+    )
   })
   it('works with sync function', async function (): Promise<void> {
     const foo = sinon.spy((a: number, wait?: number): number => {
