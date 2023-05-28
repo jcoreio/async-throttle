@@ -82,9 +82,10 @@ function throttle<Args: Array<any>, Value>(
     return result
   }
 
-  async function wrapper(...args: Args): Promise<Value> {
+  function wrapper(...args: Args): Promise<Value> {
     nextArgs = nextArgs ? getNextArgs(nextArgs, args) : args
-    if (!nextArgs) throw new Error('unexpected error: nextArgs is null')
+    if (!nextArgs)
+      return Promise.reject(new Error('unexpected error: nextArgs is null'))
     if (nextInvocation) return nextInvocation
     return (nextInvocation = (delay || Promise.resolve()).then(invoke))
   }
