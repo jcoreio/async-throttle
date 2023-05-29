@@ -85,7 +85,7 @@ function throttle<Args: Array<any>, Value>(
     return result
   }
 
-  function setNextArgs(...args: Args) {
+  function setNextArgs(args: Args) {
     nextArgs = nextArgs ? getNextArgs(nextArgs, args) : args
     if (!nextArgs) throw new Error('unexpected error: nextArgs is null')
   }
@@ -95,7 +95,7 @@ function throttle<Args: Array<any>, Value>(
   }
   function wrapper(...args: Args): Promise<Value> {
     try {
-      setNextArgs(...args)
+      setNextArgs(args)
     } catch (error) {
       return Promise.reject(error)
     }
@@ -125,7 +125,7 @@ function throttle<Args: Array<any>, Value>(
    * on the runtime and your code.
    */
   wrapper.invokeIgnoreResult = (...args: Args) => {
-    setNextArgs(...args)
+    setNextArgs(args)
     if (!nextInvocation) {
       doInvoke().catch((err: any) => {
         if (!(err instanceof CanceledError)) {
