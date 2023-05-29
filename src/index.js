@@ -69,7 +69,9 @@ function throttle<Args: Array<any>, Value>(
   function invoke(): Promise<Value> {
     const args = nextArgs
     // istanbul ignore next
-    if (!args) throw new Error('unexpected error: nextArgs is null')
+    if (!args) {
+      return Promise.reject(new Error('unexpected error: nextArgs is null'))
+    }
     nextInvocation = null
     nextArgs = null
     const result = Promise.resolve(fn(...args))
