@@ -72,7 +72,7 @@ function throttle<Args: Array<any>, Value>(
     if (!args) throw new Error('unexpected error: nextArgs is null')
     nextInvocation = null
     nextArgs = null
-    const result = (async () => await fn(...args))()
+    const result = Promise.resolve(fn(...args))
     lastInvocationDone = result
       .catch(() => {})
       .then(() => {
@@ -83,7 +83,11 @@ function throttle<Args: Array<any>, Value>(
   }
 
   function wrapper(...args: Args): Promise<Value> {
-    nextArgs = nextArgs ? getNextArgs(nextArgs, args) : args
+    try {
+      nextArgs = nextArgs ? getNextArgs(nextArgs, args) : args
+    } catch (error) {
+      return Promise.reject(error)
+    }
     if (!nextArgs)
       return Promise.reject(new Error('unexpected error: nextArgs is null'))
     if (nextInvocation) return nextInvocation
