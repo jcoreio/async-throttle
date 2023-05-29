@@ -69,6 +69,37 @@ throttledFn(5)
 // foo will be called with 4
 ```
 
+### `throttledFn.invokeIgnoreResult(args)`
+
+Calls the throttled function soon, but doesn't return a promise, catches any CanceledError, and doesn't create any new promises if a call is already pending.
+
+To use this, you should handle all errors inside the throttled function:
+
+```js
+const throttled = throttle(async (arg) => {
+  try {
+    await doSomething(arg)
+  } catch (err) {
+    // handle error
+  }
+})
+```
+
+Then call `invokeIgnoreResult` instead of the throttled function:
+
+```js
+throttled.invokeIgnoreResult(arg)
+```
+
+The `invokeIgnoreResult` method is useful because the following code example would leave 1000 pending promises
+on the heap, even though the catch block is a no-op:
+
+```js
+for (let i = 0; i < 1000; i++) {
+  throttled(arg).catch(() => {})
+}
+```
+
 ### `throttledFn.cancel()`
 
 Cancels the pending invocation, if any. All `Promise`s tracking the pending invocation will be

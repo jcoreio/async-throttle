@@ -71,7 +71,7 @@ describe('throttle', () => {
     const fn = throttle(async (x) => x * 2, 100, {
       getNextArgs: () => (null: any),
     })
-    expect(Promise.all([fn(1), fn(1)])).to.be.rejectedWith(
+    await expect(Promise.all([fn(1), fn(1), fn(1), fn(1)])).to.be.rejectedWith(
       'unexpected error: nextArgs is null'
     )
   })

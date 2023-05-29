@@ -8,6 +8,7 @@ export default function throttle<Args extends any[], Value>(
   }
 ): {
   (...args: Args): Promise<Value>
+  invokeIgnoreResult: (...args: Args) => void
   cancel: () => Promise<void>
   flush: () => Promise<void>
 }
