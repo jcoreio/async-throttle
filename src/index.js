@@ -47,18 +47,20 @@ class Delay {
   }
 }
 
+export type ThrottledFunction<Args: Array<any>, Value> = {
+  (...args: Args): Promise<Value>,
+  invokeIgnoreResult: (...args: Args) => void,
+  cancel: () => Promise<void>,
+  flush: () => Promise<void>,
+}
+
 function throttle<Args: Array<any>, Value>(
   fn: (...args: Args) => Value | Promise<Value>,
   _wait: ?number,
   options: {
     getNextArgs?: (args0: Args, args1: Args) => Args,
   } = {}
-): {
-  (...args: Args): Promise<Value>,
-  invokeIgnoreResult: (...args: Args) => void,
-  cancel: () => Promise<void>,
-  flush: () => Promise<void>,
-} {
+): ThrottledFunction<Args, Value> {
   const wait = _wait != null && Number.isFinite(_wait) ? Math.max(_wait, 0) : 0
   const getNextArgs = options.getNextArgs || ((prev, next) => next)
 
@@ -162,11 +164,6 @@ module.exports = ((throttle: any): {
     options?: {
       getNextArgs?: (args0: Args, args1: Args) => Args,
     }
-  ): {
-    (...args: Args): Promise<Value>,
-    invokeIgnoreResult: (...args: Args) => void,
-    cancel: () => Promise<void>,
-    flush: () => Promise<void>,
-  },
+  ): ThrottledFunction<Args, Value>,
   CanceledError: typeof CanceledError,
 })
