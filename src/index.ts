@@ -1,5 +1,3 @@
-// @flow
-
 class CanceledError extends Error {
   constructor() {
     super('throttled invocation was canceled')
@@ -7,14 +5,14 @@ class CanceledError extends Error {
   }
 }
 
-class Delay {
-  ready: ?Promise<void>
-  resolve: () => void
+class Delay implements Promise<void> {
+  ready: Promise<void> | undefined
+  declare resolve: () => void
   canceled: boolean = false
-  timeout: TimeoutID
+  declare timeout: number | NodeJS.Timeout
 
   constructor(lastInvocationDone: Promise<any>, wait: number) {
-    const delay = new Promise((resolve: () => void) => {
+    const delay = new Promise<void>((resolve) => {
       this.timeout = setTimeout(resolve, wait)
       this.resolve = resolve
     })
@@ -24,7 +22,7 @@ class Delay {
         () => delay
       )
       .then(() => {
-        this.ready = null
+        this.ready = undefined
       })
   }
 
@@ -39,33 +37,60 @@ class Delay {
     this.resolve()
   }
 
-  then<T>(handler: () => Promise<T>): Promise<T> {
-    return (this.ready || Promise.resolve()).then((): Promise<T> => {
-      if (this.canceled) throw new CanceledError()
-      return handler()
-    })
+  get [Symbol.toStringTag]() {
+    return 'Delay'
+  }
+
+  then<TResult1 = void, TResult2 = never>(
+    onfulfilled?:
+      | ((value: void) => TResult1 | PromiseLike<TResult1>)
+      | undefined
+      | null,
+    onrejected?:
+      | ((reason: any) => TResult2 | PromiseLike<TResult2>)
+      | undefined
+      | null
+  ): Promise<TResult1 | TResult2> {
+    return (this.ready || Promise.resolve())
+      .then(() => {
+        if (this.canceled) throw new CanceledError()
+      })
+      .then(onfulfilled, onrejected)
+  }
+
+  catch<TResult = never>(
+    onrejected?:
+      | ((reason: any) => TResult | PromiseLike<TResult>)
+      | undefined
+      | null
+  ): Promise<void | TResult> {
+    return this.then(undefined, onrejected)
+  }
+
+  finally(onfinally?: (() => void) | undefined | null): Promise<void> {
+    return this.then().finally(onfinally)
   }
 }
 
-function throttle<Args: Array<any>, Value>(
+function throttle<Args extends any[], Value>(
   fn: (...args: Args) => Value | Promise<Value>,
-  _wait: ?number,
+  _wait?: number | null | undefined,
   options: {
-    getNextArgs?: (args0: Args, args1: Args) => Args,
+    getNextArgs?: (args0: Args, args1: Args) => Args
   } = {}
 ): {
-  (...args: Args): Promise<Value>,
-  invokeIgnoreResult: (...args: Args) => void,
-  cancel: () => Promise<void>,
-  flush: () => Promise<void>,
+  (...args: Args): Promise<Value>
+  invokeIgnoreResult: (...args: Args) => void
+  cancel: () => Promise<void>
+  flush: () => Promise<void>
 } {
   const wait = _wait != null && Number.isFinite(_wait) ? Math.max(_wait, 0) : 0
   const getNextArgs = options.getNextArgs || ((prev, next) => next)
 
-  let nextArgs: ?Args
-  let lastInvocationDone: ?Promise<any> = null
-  let delay: ?Delay = null
-  let nextInvocation: ?Promise<Value> = null
+  let nextArgs: Args | undefined
+  let lastInvocationDone: Promise<any> | undefined = undefined
+  let delay: Delay | undefined = undefined
+  let nextInvocation: Promise<Value> | undefined = undefined
 
   function invoke(): Promise<Value> {
     const args = nextArgs
@@ -73,13 +98,13 @@ function throttle<Args: Array<any>, Value>(
     if (!args) {
       return Promise.reject(new Error('unexpected error: nextArgs is null'))
     }
-    nextInvocation = null
-    nextArgs = null
+    nextInvocation = undefined
+    nextArgs = undefined
     const result = Promise.resolve(fn(...args))
     lastInvocationDone = result
       .catch(() => {})
       .then(() => {
-        lastInvocationDone = null
+        lastInvocationDone = undefined
       })
     delay = new Delay(lastInvocationDone, wait)
     return result
@@ -139,10 +164,10 @@ function throttle<Args: Array<any>, Value>(
   wrapper.cancel = async (): Promise<void> => {
     const prevLastInvocationDone = lastInvocationDone
     delay?.cancel?.()
-    nextInvocation = null
-    nextArgs = null
-    lastInvocationDone = null
-    delay = null
+    nextInvocation = undefined
+    nextArgs = undefined
+    lastInvocationDone = undefined
+    delay = undefined
     await prevLastInvocationDone
   }
 
@@ -153,20 +178,6 @@ function throttle<Args: Array<any>, Value>(
 
   return wrapper
 }
-;(throttle: any).CanceledError = CanceledError
+;(throttle as any).CanceledError = CanceledError
 
-module.exports = ((throttle: any): {
-  <Args: Array<any>, Value>(
-    fn: (...args: Args) => Promise<Value>,
-    wait: ?number,
-    options?: {
-      getNextArgs?: (args0: Args, args1: Args) => Args,
-    }
-  ): {
-    (...args: Args): Promise<Value>,
-    invokeIgnoreResult: (...args: Args) => void,
-    cancel: () => Promise<void>,
-    flush: () => Promise<void>,
-  },
-  CanceledError: typeof CanceledError,
-})
+export default throttle
