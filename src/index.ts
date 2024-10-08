@@ -72,18 +72,20 @@ class Delay implements Promise<void> {
   }
 }
 
+export type ThrottledFunction<Args extends Array<any>, Value> = {
+  (...args: Args): Promise<Value>
+  invokeIgnoreResult: (...args: Args) => void
+  cancel: () => Promise<void>
+  flush: () => Promise<void>
+}
+
 function throttle<Args extends any[], Value>(
   fn: (...args: Args) => Value | Promise<Value>,
   _wait?: number | null | undefined,
   options: {
     getNextArgs?: (args0: Args, args1: Args) => Args
   } = {}
-): {
-  (...args: Args): Promise<Value>
-  invokeIgnoreResult: (...args: Args) => void
-  cancel: () => Promise<void>
-  flush: () => Promise<void>
-} {
+): ThrottledFunction<Args, Value> {
   const wait = _wait != null && Number.isFinite(_wait) ? Math.max(_wait, 0) : 0
   const getNextArgs = options.getNextArgs || ((prev, next) => next)
 
