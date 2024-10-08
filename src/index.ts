@@ -181,3 +181,4 @@ function throttle<Args extends any[], Value>(
 ;(throttle as any).CanceledError = CanceledError
 
 export default throttle
+export { CanceledError }
