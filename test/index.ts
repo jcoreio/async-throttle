@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { describe, it, before, after, beforeEach, afterEach } from 'mocha'
 import chai, { expect, assert } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
@@ -90,7 +91,7 @@ describe('throttle', () => {
     expect(foo.args).to.deep.equal([[3]])
 
     promises = [fn(4), fn(-4), fn(5)].map(wrapPromise)
-    promises.forEach((p) => p.catch(() => {}))
+    promises.forEach((p) => void p.catch(() => {}))
     await clock.tickAsync(40)
     for (const promise of promises) assert(promise.isPending())
 
@@ -125,7 +126,7 @@ describe('throttle', () => {
     expect(foo.args).to.deep.equal([[3]])
 
     promises = [fn(4), fn(-4), fn(5)].map(wrapPromise)
-    promises.forEach((p) => p.catch(() => {}))
+    promises.forEach((p) => void p.catch(() => {}))
     await clock.tickAsync(40)
     for (const promise of promises) assert(promise.isPending())
 
@@ -148,7 +149,7 @@ describe('throttle', () => {
 
     promises.push(...[fn(2, 200), fn(-3, 200)].map(wrapPromise))
     promises = promises.map(wrapPromise)
-    promises.forEach((p) => p.catch(() => {}))
+    promises.forEach((p) => void p.catch(() => {}))
     for (const promise of promises) assert(promise.isPending())
 
     await clock.tickAsync(200)
@@ -176,7 +177,7 @@ describe('throttle', () => {
     expect(foo.args).to.deep.equal([[1]])
 
     promises = [fn(4), fn(-4), fn(5)].map(wrapPromise)
-    promises.forEach((p) => p.catch(() => {}))
+    promises.forEach((p) => void p.catch(() => {}))
     await clock.tickAsync(40)
     for (const promise of promises) assert(promise.isPending())
 

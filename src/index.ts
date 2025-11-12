@@ -42,14 +42,8 @@ class Delay implements Promise<void> {
   }
 
   then<TResult1 = void, TResult2 = never>(
-    onfulfilled?:
-      | ((value: void) => TResult1 | PromiseLike<TResult1>)
-      | undefined
-      | null,
-    onrejected?:
-      | ((reason: any) => TResult2 | PromiseLike<TResult2>)
-      | undefined
-      | null
+    onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null,
+    onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null
   ): Promise<TResult1 | TResult2> {
     return (this.ready || Promise.resolve())
       .then(() => {
@@ -59,15 +53,12 @@ class Delay implements Promise<void> {
   }
 
   catch<TResult = never>(
-    onrejected?:
-      | ((reason: any) => TResult | PromiseLike<TResult>)
-      | undefined
-      | null
+    onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null
   ): Promise<void | TResult> {
     return this.then(undefined, onrejected)
   }
 
-  finally(onfinally?: (() => void) | undefined | null): Promise<void> {
+  finally(onfinally?: (() => void) | null): Promise<void> {
     return this.then().finally(onfinally)
   }
 }
@@ -81,7 +72,7 @@ export type ThrottledFunction<Args extends Array<any>, Value> = {
 
 function throttle<Args extends any[], Value>(
   fn: (...args: Args) => Value | Promise<Value>,
-  _wait?: number | null | undefined,
+  _wait?: number | null,
   options: {
     getNextArgs?: (args0: Args, args1: Args) => Args
   } = {}
@@ -114,6 +105,7 @@ function throttle<Args extends any[], Value>(
 
   function setNextArgs(args: Args) {
     nextArgs = nextArgs ? getNextArgs(nextArgs, args) : args
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!nextArgs) throw new Error('unexpected error: nextArgs is null')
   }
 
@@ -123,7 +115,8 @@ function throttle<Args extends any[], Value>(
   function wrapper(...args: Args): Promise<Value> {
     try {
       setNextArgs(args)
-    } catch (error) {
+    } catch (error: unknown) {
+      // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
       return Promise.reject(error)
     }
     return nextInvocation || doInvoke()
@@ -154,7 +147,7 @@ function throttle<Args extends any[], Value>(
   wrapper.invokeIgnoreResult = (...args: Args) => {
     setNextArgs(args)
     if (!nextInvocation) {
-      doInvoke().catch((err: any) => {
+      doInvoke().catch((err: unknown) => {
         if (!(err instanceof CanceledError)) {
           // trigger the unhandled promise rejection handler
           throw err
@@ -165,7 +158,7 @@ function throttle<Args extends any[], Value>(
 
   wrapper.cancel = async (): Promise<void> => {
     const prevLastInvocationDone = lastInvocationDone
-    delay?.cancel?.()
+    delay?.cancel()
     nextInvocation = undefined
     nextArgs = undefined
     lastInvocationDone = undefined
@@ -174,7 +167,7 @@ function throttle<Args extends any[], Value>(
   }
 
   wrapper.flush = async (): Promise<void> => {
-    delay?.flush?.()
+    delay?.flush()
     await lastInvocationDone
   }
 
