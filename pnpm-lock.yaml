@@ -16,26 +16,26 @@ importers:
         specifier: ^7.20.7
         version: 7.27.1(@babel/core@7.28.5)
       '@jcoreio/toolchain':
-        specifier: ^5.7.0
-        version: 5.7.0
+        specifier: ^5.8.2
+        version: 5.8.2
       '@jcoreio/toolchain-circle':
-        specifier: ^5.7.0
-        version: 5.7.0
+        specifier: ^5.8.2
+        version: 5.8.2
       '@jcoreio/toolchain-esnext':
-        specifier: ^5.7.0
-        version: 5.7.0
+        specifier: ^5.8.2
+        version: 5.8.2
       '@jcoreio/toolchain-flow':
-        specifier: ^5.7.0
-        version: 5.7.0(hermes-eslint@0.26.0)
+        specifier: ^5.8.2
+        version: 5.8.2(hermes-eslint@0.26.0)
       '@jcoreio/toolchain-mocha':
-        specifier: ^5.7.0
-        version: 5.7.0
+        specifier: ^5.8.2
+        version: 5.8.2
       '@jcoreio/toolchain-semantic-release':
-        specifier: ^5.7.0
-        version: 5.7.0
+        specifier: ^5.8.2
+        version: 5.8.2
       '@jcoreio/toolchain-typescript':
-        specifier: ^5.7.0
-        version: 5.7.0(typescript@5.9.3)
+        specifier: ^5.8.2
+        version: 5.8.2(typescript@5.9.3)
       '@types/chai':
         specifier: ^4.3.5
         version: 4.3.20
@@ -87,9 +87,6 @@ importers:
       typescript:
         specifier: ^5.1.0
         version: 5.9.3
-      waait:
-        specifier: ^1.0.5
-        version: 1.0.5
 
 packages:
 
@@ -756,29 +753,29 @@ packages:
     resolution: {integrity: sha512-svx4ZCjZV46qV75cukBCA0mb0lsBA/bYwA/vNb/CWzV5cYrKDNx8kG5/kdUzqW/VWc2B7HI7Dm8ggB+2bp8VbA==}
     engines: {node: '>=16'}
 
-  '@jcoreio/toolchain-circle@5.7.0':
-    resolution: {integrity: sha512-Ft/7O5nLgbOY9bhzJI2XK7SoiwqrsaFa1jxk0remYW4tVJbIXlfzWhOlGuU/XWSk1vUpA/bc4+3JuotcW2kOmg==}
+  '@jcoreio/toolchain-circle@5.8.2':
+    resolution: {integrity: sha512-qOdA6kia9nb8n68GLhUkknfsSsucxi+1ZN4nvjo7iUruaje6GV4Ae/OZffmf1W82PHHyh+H66R/ZXG2d9BOIlg==}
 
-  '@jcoreio/toolchain-esnext@5.7.0':
-    resolution: {integrity: sha512-jc48b/yznwXykWo/bTsj8BRtgzlFpuXqMkOCnKUicpJ3TV9/nPJE71AodHb45F76JHySQi66aQ74BtT7A6Hdsg==}
+  '@jcoreio/toolchain-esnext@5.8.2':
+    resolution: {integrity: sha512-PYr/HiPwnEsWBV55f0rpmpxJoE6VHEiGK5q9veyQR/sFIcXRX+49UzrvzyeqA2mBdXxJUW8vuVCWLc9/wjXehA==}
     hasBin: true
 
-  '@jcoreio/toolchain-flow@5.7.0':
-    resolution: {integrity: sha512-PBaGVYwx+IIFJsStmXXnmqUksRU94VUW3FgHF3uSxbVu2VRa40AjyeqxZz9NErzdNMyVuhiNQUh7cZQNtLmq0g==}
+  '@jcoreio/toolchain-flow@5.8.2':
+    resolution: {integrity: sha512-Xp4eFWZoS3AaPuRoshg9bL1PXpp70Yt1qTwW3jNbrlyFEwFs0HkITeKVUINmmg9axx4mB8tigNSR5c4PE9oVPw==}
 
-  '@jcoreio/toolchain-mocha@5.7.0':
-    resolution: {integrity: sha512-21rn1vFa3qqtw+NbxZxXZHHdJDPsSILwW5pXSQtqh6phxsTrX7rT5N8MMqxxgx/xYr0z9dndZclRgoQSMTBZcg==}
+  '@jcoreio/toolchain-mocha@5.8.2':
+    resolution: {integrity: sha512-55b5VrrH3we4yGhPUbVKbIjC99alUByAS8iiJ7Ua0kYbhqb84Lrae+M+Se6ih1YOAQIoOSX2879cONINSGdNMQ==}
 
-  '@jcoreio/toolchain-semantic-release@5.7.0':
-    resolution: {integrity: sha512-svgXsWMobDeJYojNjyUkk2+4oiueL48BO0Mn+QCDBhmGtI/8I2Q46TCll/ruIRHj5D5pXvRnjAviDugonrDJZg==}
+  '@jcoreio/toolchain-semantic-release@5.8.2':
+    resolution: {integrity: sha512-Iy6dfL1CBCf+DIlKEq9vMAZJ3trH2/ISP2d0O8hDvX3Xd4Apy3J8b/Mum/jGCAki5IviXIjULnZhQdsbmVf7pA==}
 
-  '@jcoreio/toolchain-typescript@5.7.0':
-    resolution: {integrity: sha512-32EAO7PzXEKIdplAWasIqQ2HX0HgRiBI+ur4WLEGAHeNYj+uXYEdAI9aK/Ju6uC4OOl970FgtkhRfhn8/uPh9A==}
+  '@jcoreio/toolchain-typescript@5.8.2':
+    resolution: {integrity: sha512-WP/mcnKZKMgHOHSin5StbmTRKLwsxIfWrgaWZ1reV6/FaK6WfMGs4fNsL4Sbzt6GSokC6e+c1NEUXXjDnfa5hg==}
     peerDependencies:
       typescript: ^5.1.0
 
-  '@jcoreio/toolchain@5.7.0':
-    resolution: {integrity: sha512-Hs3n3PNd9BhE2inOsNVEd4N41UrcLO2ICPrAFLCoWVIjOUNDL5VlYYeAvHhJdzIVIBducWsbIcg6rIjMUmTNzQ==}
+  '@jcoreio/toolchain@5.8.2':
+    resolution: {integrity: sha512-LIqCqHEkOhKOTj+CYGuSz3/7MKOISilR8ySHatM1otvE1ZCljfMdpDQjGw4vZGGPEPSrLzvaf8fUPRg2idf6vA==}
     hasBin: true
 
   '@jridgewell/gen-mapping@0.3.13':
@@ -1028,8 +1025,8 @@ packages:
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
-  baseline-browser-mapping@2.8.26:
-    resolution: {integrity: sha512-73lC1ugzwoaWCLJ1LvOgrR5xsMLTqSKIEoMHVtL9E/HNk0PXtTM76ZIm84856/SF7Nv8mPZxKoBsgpm0tR1u1Q==}
+  baseline-browser-mapping@2.8.31:
+    resolution: {integrity: sha512-a28v2eWrrRWPpJSzxc+mKwm0ZtVx/G8SepdQZDArnXYU/XS+IF6mp8aB/4E+hH1tyGCoDo3KlUCdlSxGDsRkAw==}
     hasBin: true
 
   binary-extensions@2.3.0:
@@ -1085,8 +1082,8 @@ packages:
     resolution: {integrity: sha512-Gmy6FhYlCY7uOElZUSbxo2UCDH8owEk996gkbrpsgGtrJLM3J7jGxl9Ic7Qwwj4ivOE5AWZWRMecDdF7hqGjFA==}
     engines: {node: '>=10'}
 
-  caniuse-lite@1.0.30001754:
-    resolution: {integrity: sha512-x6OeBXueoAceOmotzx3PO4Zpt4rzpeIFsSr6AAePTZxSkXiYDUmpypEl7e2+8NCd9bD7bXjqyef8CJYPC1jfxg==}
+  caniuse-lite@1.0.30001757:
+    resolution: {integrity: sha512-r0nnL/I28Zi/yjk1el6ilj27tKcdjLsNqAOZr0yVjWPrSQyHgKI2INaEWw21bAQSv2LXRt1XuCS/GomNpWOxsQ==}
 
   chai-as-promised@7.1.2:
     resolution: {integrity: sha512-aBDHZxRzYnUYuIAIPBH2s511DjlKPzXNlXSGFC8CwmroWQLfrW0LtE1nK3MAwwNhJPa9raEjNCmRoFpG0Hurdw==}
@@ -1164,8 +1161,8 @@ packages:
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
 
-  core-js-compat@3.46.0:
-    resolution: {integrity: sha512-p9hObIIEENxSV8xIu+V68JjSeARg6UVMG5mR+JEUguG3sI6MsiS1njz2jHmyJDvA+8jX/sytkBHup6kxhM9law==}
+  core-js-compat@3.47.0:
+    resolution: {integrity: sha512-IGfuznZ/n7Kp9+nypamBhvwdwLsW6KC8IOaURw2doAK5e98AG3acVLdh0woOnEqCfUtS+Vu882JE4k/DAm3ItQ==}
 
   core-js@3.46.0:
     resolution: {integrity: sha512-vDMm9B0xnqqZ8uSBpZ8sNtRtOdmfShrvT6h2TuQGLs0Is+cR0DYbj/KWP6ALVNbWPpqA/qPLoOuppJN07humpA==}
@@ -1244,8 +1241,8 @@ packages:
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
 
-  electron-to-chromium@1.5.250:
-    resolution: {integrity: sha512-/5UMj9IiGDMOFBnN4i7/Ry5onJrAGSbOGo3s9FEKmwobGq6xw832ccET0CE3CkkMBZ8GJSlUIesZofpyurqDXw==}
+  electron-to-chromium@1.5.259:
+    resolution: {integrity: sha512-I+oLXgpEJzD6Cwuwt1gYjxsDmu/S/Kd41mmLA3O+/uH2pFRO/DvOjUyGozL8j3KeLV6WyZ7ssPwELMsXCcsJAQ==}
 
   emoji-regex@10.6.0:
     resolution: {integrity: sha512-toUI84YS5YmxW219erniWD0CIVOo46xGKColeNQRgOzDorgBi1v4D71/OFzgD9GO2UGKIv1C3Sp8DAn0+j5w7A==}
@@ -1544,19 +1541,17 @@ packages:
     resolution: {integrity: sha512-XxwI8EOhVQgWp6iDL+3b0r86f4d6AX6zSU55HfB4ydCEuXLXc5FcYeOu+nnGftS4TEju/11rt4KJPTMgbfmv4A==}
     engines: {node: '>=10.13.0'}
 
-  glob@11.0.3:
-    resolution: {integrity: sha512-2Nim7dha1KVkaiF4q6Dj+ngPPMdfvLJEOpZk/jKiUAkqKebpGAWQXAq9z1xu9HKu5lWfqw/FASuccEjyznjPaA==}
+  glob@11.1.0:
+    resolution: {integrity: sha512-vuNwKSaKiqm7g0THUBu2x7ckSs3XJLXE+2ssL7/MfTGPLLcrJQ/4Uq1CjPTtO5cCIiRxqvN6Twy1qOwhL0Xjcw==}
     engines: {node: 20 || >=22}
     hasBin: true
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
-    deprecated: Glob versions prior to v9 are no longer supported
 
   glob@8.1.0:
     resolution: {integrity: sha512-r8hpEjiQEYlF2QU0df3dS+nxxSIreXQS1qRhMJM0Q5NDdR386C7jb7Hwwod8Fgiuex+k0GFjgft18yvxm5XoCQ==}
     engines: {node: '>=12'}
-    deprecated: Glob versions prior to v9 are no longer supported
 
   globals@14.0.0:
     resolution: {integrity: sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==}
@@ -1661,7 +1656,6 @@ packages:
 
   inflight@1.0.6:
     resolution: {integrity: sha512-k92I/b08q4wvFscXCLvqfsHCrjrF7yiXsQuIVvVE7N82W3+aqpzuUdBbfhWcy/FZR3/4IgflMgKLOsvPDrGCJA==}
-    deprecated: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
 
   inherits@2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
@@ -1955,7 +1949,6 @@ packages:
 
   lodash.get@4.4.2:
     resolution: {integrity: sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==}
-    deprecated: This package is deprecated. Use the optional chaining (?.) operator instead.
 
   lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
@@ -2335,7 +2328,6 @@ packages:
 
   rimraf@3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
-    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
   run-parallel@1.2.0:
@@ -2424,7 +2416,6 @@ packages:
 
   sinon@9.2.4:
     resolution: {integrity: sha512-zljcULZQsJxVra28qIAL6ow1Z9tpattkCTEJR4RBP3TGc00FcttsP5pK284Nas5WjMZU5Yzy3kAIp3B3KRf5Yg==}
-    deprecated: 16.1.1
 
   sisteransi@1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
@@ -2637,9 +2628,6 @@ packages:
   validate-npm-package-name@5.0.1:
     resolution: {integrity: sha512-OljLrQ9SQdOUqTaQxqL5dEfZWrXExyyWsozYlAWFawPVNuD83igl7uJD2RTkNMbniIYgt8l81eCJGIdQF7avLQ==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
-
-  waait@1.0.5:
-    resolution: {integrity: sha512-wp+unA4CpqxvBUKHHv8D86fK4jWByHAWyhEXXVHfVUZfK+16ylpj7hjQ58Z8j9ntu8XNukRQT8Fi5qbyJ8rkyw==}
 
   which-boxed-primitive@1.1.1:
     resolution: {integrity: sha512-TbX3mj8n0odCBFVlY8AxkqcHASw3L60jIuF8jFP78az3C2YhmGvqbHBpAjTRH2/xqYunrJ9g1jSyjCjpoWzIAA==}
@@ -3442,7 +3430,7 @@ snapshots:
       babel-plugin-polyfill-corejs2: 0.4.14(@babel/core@7.28.5)
       babel-plugin-polyfill-corejs3: 0.13.0(@babel/core@7.28.5)
       babel-plugin-polyfill-regenerator: 0.6.5(@babel/core@7.28.5)
-      core-js-compat: 3.46.0
+      core-js-compat: 3.47.0
       semver: 6.3.1
     transitivePeerDependencies:
       - supports-color
@@ -3601,9 +3589,9 @@ snapshots:
       pkg-up: 3.1.0
       validate-npm-package-name: 5.0.1
 
-  '@jcoreio/toolchain-circle@5.7.0':
+  '@jcoreio/toolchain-circle@5.8.2':
     dependencies:
-      '@jcoreio/toolchain': 5.7.0
+      '@jcoreio/toolchain': 5.8.2
       dedent-js: 1.0.1
       open: 8.4.2
       semver: 7.7.3
@@ -3611,7 +3599,7 @@ snapshots:
       - jiti
       - supports-color
 
-  '@jcoreio/toolchain-esnext@5.7.0':
+  '@jcoreio/toolchain-esnext@5.8.2':
     dependencies:
       '@babel/cli': 7.28.3(@babel/core@7.28.5)
       '@babel/core': 7.28.5
@@ -3621,7 +3609,7 @@ snapshots:
       '@babel/register': 7.28.3(@babel/core@7.28.5)
       '@babel/runtime': 7.28.4
       '@babel/traverse': 7.28.5
-      '@jcoreio/toolchain': 5.7.0
+      '@jcoreio/toolchain': 5.8.2
       babel-parse-wild-code: 2.1.5
       babel-plugin-add-module-exports: 1.0.4
       babel-plugin-istanbul: 7.0.1
@@ -3632,18 +3620,19 @@ snapshots:
       globals: 16.5.0
       resolve: 1.22.11
       resolve-bin: 1.0.1
+      semver: 7.7.3
     transitivePeerDependencies:
       - jiti
       - supports-color
 
-  '@jcoreio/toolchain-flow@5.7.0(hermes-eslint@0.26.0)':
+  '@jcoreio/toolchain-flow@5.8.2(hermes-eslint@0.26.0)':
     dependencies:
       '@babel/core': 7.28.5
       '@babel/plugin-syntax-flow': 7.27.1(@babel/core@7.28.5)
       '@babel/plugin-transform-react-jsx': 7.27.1(@babel/core@7.28.5)
       '@babel/preset-flow': 7.27.1(@babel/core@7.28.5)
-      '@jcoreio/toolchain': 5.7.0
-      '@jcoreio/toolchain-esnext': 5.7.0
+      '@jcoreio/toolchain': 5.8.2
+      '@jcoreio/toolchain-esnext': 5.8.2
       dedent-js: 1.0.1
       eslint: 9.39.1
       eslint-plugin-ft-flow: 3.0.11(eslint@9.39.1)(hermes-eslint@0.26.0)
@@ -3653,9 +3642,9 @@ snapshots:
       - jiti
       - supports-color
 
-  '@jcoreio/toolchain-mocha@5.7.0':
+  '@jcoreio/toolchain-mocha@5.8.2':
     dependencies:
-      '@jcoreio/toolchain': 5.7.0
+      '@jcoreio/toolchain': 5.8.2
       babel-plugin-istanbul: 7.0.1
       dedent-js: 1.0.1
       eslint: 9.39.1
@@ -3668,21 +3657,21 @@ snapshots:
       - jiti
       - supports-color
 
-  '@jcoreio/toolchain-semantic-release@5.7.0':
+  '@jcoreio/toolchain-semantic-release@5.8.2':
     dependencies:
-      '@jcoreio/toolchain': 5.7.0
+      '@jcoreio/toolchain': 5.8.2
       dedent-js: 1.0.1
       resolve-bin: 1.0.1
     transitivePeerDependencies:
       - jiti
       - supports-color
 
-  '@jcoreio/toolchain-typescript@5.7.0(typescript@5.9.3)':
+  '@jcoreio/toolchain-typescript@5.8.2(typescript@5.9.3)':
     dependencies:
       '@babel/core': 7.28.5
       '@babel/preset-typescript': 7.28.5(@babel/core@7.28.5)
-      '@jcoreio/toolchain': 5.7.0
-      '@jcoreio/toolchain-esnext': 5.7.0
+      '@jcoreio/toolchain': 5.8.2
+      '@jcoreio/toolchain-esnext': 5.8.2
       '@typescript-eslint/eslint-plugin': 8.46.4(@typescript-eslint/parser@8.46.4(eslint@9.39.1)(typescript@5.9.3))(eslint@9.39.1)(typescript@5.9.3)
       '@typescript-eslint/parser': 8.46.4(eslint@9.39.1)(typescript@5.9.3)
       eslint: 9.39.1
@@ -3693,7 +3682,7 @@ snapshots:
       - jiti
       - supports-color
 
-  '@jcoreio/toolchain@5.7.0':
+  '@jcoreio/toolchain@5.8.2':
     dependencies:
       '@babel/generator': 7.28.5
       '@babel/parser': 7.28.5
@@ -3710,7 +3699,7 @@ snapshots:
       execa: 5.1.1
       find-up: 5.0.0
       fs-extra: 10.1.0
-      glob: 11.0.3
+      glob: 11.1.0
       globals: 16.5.0
       js-yaml: 4.1.0
       json5: 2.2.3
@@ -4016,7 +4005,7 @@ snapshots:
     dependencies:
       '@babel/core': 7.28.5
       '@babel/helper-define-polyfill-provider': 0.6.5(@babel/core@7.28.5)
-      core-js-compat: 3.46.0
+      core-js-compat: 3.47.0
     transitivePeerDependencies:
       - supports-color
 
@@ -4033,7 +4022,7 @@ snapshots:
 
   balanced-match@1.0.2: {}
 
-  baseline-browser-mapping@2.8.26: {}
+  baseline-browser-mapping@2.8.31: {}
 
   binary-extensions@2.3.0: {}
 
@@ -4054,9 +4043,9 @@ snapshots:
 
   browserslist@4.28.0:
     dependencies:
-      baseline-browser-mapping: 2.8.26
-      caniuse-lite: 1.0.30001754
-      electron-to-chromium: 1.5.250
+      baseline-browser-mapping: 2.8.31
+      caniuse-lite: 1.0.30001757
+      electron-to-chromium: 1.5.259
       node-releases: 2.0.27
       update-browserslist-db: 1.1.4(browserslist@4.28.0)
 
@@ -4092,7 +4081,7 @@ snapshots:
 
   camelcase@6.3.0: {}
 
-  caniuse-lite@1.0.30001754: {}
+  caniuse-lite@1.0.30001757: {}
 
   chai-as-promised@7.1.2(chai@4.5.0):
     dependencies:
@@ -4181,7 +4170,7 @@ snapshots:
 
   convert-source-map@2.0.0: {}
 
-  core-js-compat@3.46.0:
+  core-js-compat@3.47.0:
     dependencies:
       browserslist: 4.28.0
 
@@ -4259,7 +4248,7 @@ snapshots:
 
   eastasianwidth@0.2.0: {}
 
-  electron-to-chromium@1.5.250: {}
+  electron-to-chromium@1.5.259: {}
 
   emoji-regex@10.6.0: {}
 
@@ -4630,7 +4619,7 @@ snapshots:
     dependencies:
       is-glob: 4.0.3
 
-  glob@11.0.3:
+  glob@11.1.0:
     dependencies:
       foreground-child: 3.3.1
       jackspeak: 4.1.1
@@ -5789,8 +5778,6 @@ snapshots:
       homedir-polyfill: 1.0.3
 
   validate-npm-package-name@5.0.1: {}
-
-  waait@1.0.5: {}
 
   which-boxed-primitive@1.1.1:
     dependencies:

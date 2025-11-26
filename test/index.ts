@@ -2,10 +2,11 @@
 import { describe, it, before, after, beforeEach, afterEach } from 'mocha'
 import chai, { expect, assert } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
-import delay from 'waait'
 import sinon from 'sinon'
 
-import throttle, { CanceledError } from '../src/index'
+const delay = (ms: number) => new Promise<void>((r) => setTimeout(r, ms))
+
+import throttle, { CanceledError } from '../src/index.ts'
 
 chai.use(chaiAsPromised)
 

@@ -7,14 +7,14 @@
 [![npm version](https://badge.fury.io/js/%40jcoreio%2Fasync-throttle.svg)](https://badge.fury.io/js/%40jcoreio%2Fasync-throttle)
 
 Throttle async and promise returning functions. Unlike similarly named packages, this behaves much like an async version of
-`lodash.throttle`:
+[`lodash.throttle`](https://lodash.com/docs/4.17.15#throttle):
 
 - Only one invocation can be running at a time (similarly named packages don't do this)
 - Has `.cancel()` and `.flush()`
 
 ## Differences from `lodash.throttle`
 
-- No `leading` and `trailing` options
+- No `leading` and `trailing` options (they're both always `true`)
 - `getNextArgs` option allows you to customize how the arguments for the next invocation are determined
 
 ## Installing

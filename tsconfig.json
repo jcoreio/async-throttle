@@ -3,6 +3,8 @@
   "include": ["./src", "./test"],
   "exclude": ["node_modules"],
   "compilerOptions": {
-    "lib": ["es2019", "DOM"]
+    "lib": ["es2019", "DOM"],
+    "module": "nodenext",
+    "allowImportingTsExtensions": true
   }
 }

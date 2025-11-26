@@ -3,6 +3,7 @@
   "version": "0.0.0-development",
   "description": "throttle async and promise-returning functions.  Other packages don't do it right.",
   "sideEffects": false,
+  "type": "module",
   "scripts": {
     "tc": "toolchain",
     "toolchain": "toolchain",
@@ -27,13 +28,13 @@
   "homepage": "https://github.com/jcoreio/async-throttle#readme",
   "devDependencies": {
     "@babel/node": "^7.20.7",
-    "@jcoreio/toolchain": "^5.7.0",
-    "@jcoreio/toolchain-circle": "^5.7.0",
-    "@jcoreio/toolchain-esnext": "^5.7.0",
-    "@jcoreio/toolchain-flow": "^5.7.0",
-    "@jcoreio/toolchain-mocha": "^5.7.0",
-    "@jcoreio/toolchain-semantic-release": "^5.7.0",
-    "@jcoreio/toolchain-typescript": "^5.7.0",
+    "@jcoreio/toolchain": "^5.8.2",
+    "@jcoreio/toolchain-circle": "^5.8.2",
+    "@jcoreio/toolchain-esnext": "^5.8.2",
+    "@jcoreio/toolchain-flow": "^5.8.2",
+    "@jcoreio/toolchain-mocha": "^5.8.2",
+    "@jcoreio/toolchain-semantic-release": "^5.8.2",
+    "@jcoreio/toolchain-typescript": "^5.8.2",
     "@types/chai": "^4.3.5",
     "@types/chai-as-promised": "^7.1.5",
     "@types/mocha": "^10.0.1",
@@ -50,24 +51,23 @@
     "nyc": "^15.1.0",
     "prettier": "^3.4.2",
     "sinon": "^9.0.3",
-    "typescript": "^5.1.0",
-    "waait": "^1.0.5"
+    "typescript": "^5.1.0"
   },
   "dependencies": {
     "@babel/runtime": "^7.26.0"
   },
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
       "types": {
-        "import": "./dist/index.d.mts",
-        "default": "./dist/index.d.ts"
+        "import": "./dist/index.d.ts",
+        "default": "./dist/index.d.cts"
       },
-      "import": "./dist/index.mjs",
-      "default": "./dist/index.js"
+      "import": "./dist/index.js",
+      "default": "./dist/index.cjs"
     }
   },
   "engines": {
@@ -75,6 +75,6 @@
   },
   "packageManager": "pnpm@10.6.5",
   "@jcoreio/toolchain": {
-    "migratedVersion": "5.7.0"
+    "migratedVersion": "5.8.2"
   }
 }
