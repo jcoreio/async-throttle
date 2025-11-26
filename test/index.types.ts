@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import throttle, { CanceledError } from '../src'
+import throttle from '../src/index.ts'
 
 function fn(x: number, y?: string): string {
   return String(x)
